@@ -36,7 +36,7 @@ def transform_text(text):
     text = [word for word in text if word.isalnum()]
     text = [word for word in text if word not in stopwords.words('english') and word not in string.punctuation]
     text = [l.lemmatize(word) for word in text]
-    return "".join(text)
+    return " ".join(text)
 
 def preprocess_df(df,text_column='text',target_column='target'):
     """
