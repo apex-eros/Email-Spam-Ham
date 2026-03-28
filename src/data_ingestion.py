@@ -1,6 +1,7 @@
 import pandas as pd
 import os,logging
 from sklearn.model_selection import train_test_split
+import yaml
 
 #Ensure logs dir exists
 
@@ -23,6 +24,21 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
+
+def load_params(param_path: str)-> dict:
+    """Load paramaters from a YAML file"""
+    try:
+        with open(param_path,'r') as file:
+            params = yaml.safe_load(file)
+        logger.debug('Parameters retrieved from %s',param_path)
+        return params
+    except FileNotFoundError:
+        logger.error('File not found: %s',param_path)
+    except yaml.YAMLError as e:
+        logger.error('YAML error: %s',e)
+    except Exception as e:
+        logger.error('Unexpected error: %s',e)
+        raise
 
 def load_data(data_url : str) -> pd.DataFrame:
     """ Load data from a csv file """
@@ -64,7 +80,9 @@ def save_data(train_data:pd.DataFrame,test_data:pd.DataFrame,data_path:str) -> N
 
 def main():
     try:
-        test_size=0.2
+        params = load_params(param_path='params.yaml')
+        test_size = params['data_ingestion']['test_size']
+        #test_size=0.2
         data_path = 'https://raw.githubusercontent.com/apex-eros/MyDatasets/main/spam.csv'
         df = load_data(data_url=data_path)
         final_df = preprocess_data(df)
