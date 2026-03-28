@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 log_dir='logs'
 os.makedirs(log_dir,exist_ok=True)
 
-logger = logging.getLogger('Feature_Engineering.py')
+logger = logging.getLogger('Feature_Engineering')
 logger.setLevel('DEBUG')
 
 console_handler = logging.StreamHandler()
